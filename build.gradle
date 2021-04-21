@@ -1,0 +1,35 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id "com.palantir.docker" version "0.26.0"
+}
+
+group = 'com.capco.digital.engineering'
+version = '0.1'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.10.5'
+    compile("org.testng:testng:6.11")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+
+}
+
+test {
+    useTestNG()
+}
+
+docker {
+    name "${project.name}:${project.version}"
+    files 'build/libs/alexcourse-0.1.jar'
+}
