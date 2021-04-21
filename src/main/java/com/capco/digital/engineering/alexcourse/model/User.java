@@ -1,6 +1,6 @@
 package com.capco.digital.engineering.alexcourse.model;
-
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,7 +18,9 @@ public class User {
 
   @Id
   private String id;
+  @NotNull
   private final String firstName;
+  @NotNull
   private final String lastName;
 
   public User(String firstName, String lastName) {
