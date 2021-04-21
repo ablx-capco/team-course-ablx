@@ -1,10 +1,8 @@
 package com.capco.digital.engineering.alexcourse.controller;
 
 import com.capco.digital.engineering.alexcourse.model.User;
-import com.capco.digital.engineering.alexcourse.repository.IssueRepository;
 import com.capco.digital.engineering.alexcourse.service.UserService;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
