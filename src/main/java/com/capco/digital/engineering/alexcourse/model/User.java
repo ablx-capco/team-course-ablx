@@ -1,4 +1,6 @@
 package com.capco.digital.engineering.alexcourse.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
@@ -7,6 +9,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class User {
 
+  @NotNull
+  private String firstName;
+  @NotNull
+  private String lastName;
+  @Id
+  @JsonIgnore
+  private String id;
+
+  public User() {
+
+  }
+  public User(String id, String firstName, String lastName) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+  public User(String firstName, String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
   @Override
   public String toString() {
     return "User{" +
@@ -14,18 +37,6 @@ public class User {
         ", firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
         '}';
-  }
-
-  @Id
-  private String id;
-  @NotNull
-  private final String firstName;
-  @NotNull
-  private final String lastName;
-
-  public User(String firstName, String lastName) {
-    this.firstName = firstName;
-    this.lastName = lastName;
   }
 
   public String getId() {

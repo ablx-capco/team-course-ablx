@@ -8,6 +8,7 @@ import static org.testng.Assert.*;
 import com.capco.digital.engineering.alexcourse.model.User;
 import com.capco.digital.engineering.alexcourse.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -43,5 +44,14 @@ public class UserServiceImplTest {
     User userToSave = new User("John", "Smith");
     userService.saveUserDetails(userToSave);
     verify(userRepository, times(1)).save(userToSave);
+  }
+
+  @Test
+  public void testRetrieveUserById() {
+    given(userRepository.findById("1"))
+        .willReturn(Optional.of(new User("John", "Smith")));
+    Optional<User> user = userService.retrieveUserById("1");
+    assertTrue(user.isPresent());
+    assertEquals(user.get(),new User("John", "Smith"));
   }
 }

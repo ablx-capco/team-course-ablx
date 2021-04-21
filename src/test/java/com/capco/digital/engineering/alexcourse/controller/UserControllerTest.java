@@ -13,7 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.capco.digital.engineering.alexcourse.model.User;
 import com.capco.digital.engineering.alexcourse.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,15 +42,14 @@ public class UserControllerTest extends AbstractTestNGSpringContextTests {
   WebApplicationContext webApplicationContext;
 
   @Test
-  public void testRetrieveUserController() throws Exception {
+  public void testRetrieveAllUserController() throws Exception {
     given(userService.retrieveUsers())
         .willReturn(List.of(new User("John", "Smith"), new User("Bob", "Smith")));
 
     this.mockMvc.perform(get("/users"))
         .andDo(print()).andExpect(status().isOk())
         .andExpect(content()
-            .string(containsString("{\"id\":null,\"firstName\":\"John\","
-                + "\"lastName\":\"Smith\"},{\"id\":null,\"firstName\":\"Bob\",\"lastName\":\"Smith\"}"
+            .string(containsString("{\"firstName\":\"John\",\"lastName\":\"Smith\"},{\"firstName\":\"Bob\",\"lastName\":\"Smith\""
             )));
   }
 
@@ -61,9 +62,27 @@ public class UserControllerTest extends AbstractTestNGSpringContextTests {
         .content(jsonBody)
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
-        .andExpect(status().isOk());
+        .andExpect(status().isCreated());
 
     verify(userService, times(1)).saveUserDetails(userToSave);
+  }
+
+  @Test
+  public void testRetrieveOneUserControllerSuccess() throws Exception {
+    given(userService.retrieveUserById("1"))
+        .willReturn(Optional.of(new User("1","John", "Smith")));
+
+    this.mockMvc.perform(get("/users/1"))
+        .andDo(print()).andExpect(status().isOk())
+        .andExpect(content()
+            .string(containsString("{\"firstName\":\"John\",\"lastName\":\"Smith\"}"
+            )));
+  }
+
+  @Test
+  public void testRetrieveOneUserControllerInvalidId() throws Exception {
+    this.mockMvc.perform(get("/users/1"))
+        .andDo(print()).andExpect(status().isNotFound());
   }
 
 
