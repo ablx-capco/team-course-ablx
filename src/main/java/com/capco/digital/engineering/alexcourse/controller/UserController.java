@@ -2,10 +2,13 @@ package com.capco.digital.engineering.alexcourse.controller;
 
 import com.capco.digital.engineering.alexcourse.model.User;
 import com.capco.digital.engineering.alexcourse.service.UserService;
+import com.capco.digital.engineering.alexcourse.service.UserServiceImpl;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
-
+  Logger logger = LogManager.getLogger(UserController.class);
   private final UserService userService;
 
   public UserController(UserService userService) {
@@ -38,6 +41,9 @@ public class UserController {
   @GetMapping("/users/{id}")
   public ResponseEntity<User> retrieveUserById(@PathVariable String id){
     Optional<User> users = userService.retrieveUserById(id);
+    if(users.isEmpty()){
+      logger.warn("No user found with given ID " + id);
+    }
     return users.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
   }
 
