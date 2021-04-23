@@ -8,12 +8,22 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
   Logger logger = LogManager.getLogger(UserServiceImpl.class);
   private final UserRepository userRepository;
+  @Autowired
+  private KafkaTemplate<String, String> kafkaTemplate;
+
+  private final static String NEW_USER_TOPIC = "test";
+
+  private void sendMessage(String msg) {
+    kafkaTemplate.send(NEW_USER_TOPIC,"USER", msg);
+  }
 
   public UserServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
@@ -27,6 +37,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void saveUserDetails(User user) {
+    sendMessage("New User Alert!");
    userRepository.save(user);
   }
 
