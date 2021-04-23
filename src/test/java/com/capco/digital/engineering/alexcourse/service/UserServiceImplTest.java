@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.testng.Assert.*;
 
+import com.capco.digital.engineering.alexcourse.config.KafkaProducerConfig;
 import com.capco.digital.engineering.alexcourse.model.User;
 import com.capco.digital.engineering.alexcourse.repository.UserRepository;
 import java.util.List;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.junit.MockitoTestListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -25,6 +28,10 @@ public class UserServiceImplTest {
 
   @Mock
   private UserRepository userRepository;
+
+
+  @Mock
+  private KafkaTemplate<String, String> kafkaTemplate;
 
   @BeforeClass
   public void init() {

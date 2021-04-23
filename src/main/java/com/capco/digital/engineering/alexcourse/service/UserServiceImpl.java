@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
   Logger logger = LogManager.getLogger(UserServiceImpl.class);
   private final UserRepository userRepository;
-  @Autowired
-  private KafkaTemplate<String, String> kafkaTemplate;
+  private final KafkaTemplate<String, String> kafkaTemplate;
 
   private final static String NEW_USER_TOPIC = "test";
 
@@ -25,8 +24,11 @@ public class UserServiceImpl implements UserService {
     kafkaTemplate.send(NEW_USER_TOPIC,"USER", msg);
   }
 
-  public UserServiceImpl(UserRepository userRepository) {
+  public UserServiceImpl(
+      UserRepository userRepository,
+      KafkaTemplate<String, String> kafkaTemplate) {
     this.userRepository = userRepository;
+    this.kafkaTemplate = kafkaTemplate;
   }
 
   @Override
